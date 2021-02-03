@@ -1,0 +1,130 @@
+version: '3'
+
+services:
+  jira-node1:
+    container_name: jira-node1
+    image: atlassian/jira-core:8.15.0-ubuntu
+    volumes:
+     - ./jira:/var/atlassian/application-data/jira/shared
+     - jira-node1-volume:/var/atlassian/application-data/jira
+    ports:
+     - "8081:8080"
+    depends_on:
+     - postgres
+    environment:
+     - ATL_AUTOLOGIN_COOKIE_AGE=3600
+     - ATL_PROXY_NAME=jira.internal
+     - ATL_PROXY_PORT=80
+     - ATL_TOMCAT_SCHEME=http
+     - JVM_MINIMUM_MEMORY=384m
+     - JVM_MAXIMUM_MEMORY=786m
+     - JVM_RESERVED_CODE_CACHE_SIZE=256m
+     - SET_PERMISSIONS=false
+     - CLUSTERED=true
+     - JIRA_NODE_ID=jira-node1
+     - JIRA_SHARED_HOME=/var/atlassian/application-data/jira/shared
+     - ATL_JDBC_URL=jdbc:postgresql://postgres:5432/jira
+     - ATL_JDBC_USER=jira
+     - ATL_JDBC_PASSWORD=jira
+     - ATL_DB_DRIVER=org.postgresql.Driver
+     - ATL_DB_TYPE=postgres72
+     - ATL_DB_SCHEMA_NAME=public
+
+  jira-node2:
+    container_name: jira-node2
+    image: atlassian/jira-core:8.15.0-ubuntu
+    volumes:
+     - ./jira:/var/atlassian/application-data/jira/shared
+     - jira-node2-volume:/var/atlassian/application-data/jira
+    ports:
+     - "8082:8080"
+    depends_on:
+     - postgres
+     - jira-node1
+    environment:
+     - ATL_AUTOLOGIN_COOKIE_AGE=3600
+     - ATL_PROXY_NAME=jira.internal
+     - ATL_PROXY_PORT=80
+     - ATL_TOMCAT_SCHEME=http
+     - JVM_MINIMUM_MEMORY=384m
+     - JVM_MAXIMUM_MEMORY=786m
+     - JVM_RESERVED_CODE_CACHE_SIZE=256m
+     - SET_PERMISSIONS=false
+     - CLUSTERED=true
+     - JIRA_NODE_ID=jira-node2
+     - JIRA_SHARED_HOME=/var/atlassian/application-data/jira/shared
+     - ATL_JDBC_URL=jdbc:postgresql://postgres:5432/jira
+     - ATL_JDBC_USER=jira
+     - ATL_JDBC_PASSWORD=jira
+     - ATL_DB_DRIVER=org.postgresql.Driver
+     - ATL_DB_TYPE=postgres72
+     - ATL_DB_SCHEMA_NAME=public
+
+  postgres:
+    container_name: postgres
+    image: postgres:10
+    healthcheck:
+      test: [ "CMD", "pg_isready", "-q", "-d", "postgres", "-U", "postgres" ]
+      timeout: 45s
+      interval: 10s
+      retries: 10
+    restart: always
+    volumes:
+     - ./pgdata:/var/lib/postgresql/data
+     - ./pgdb:/docker-entrypoint-initdb.d/
+    environment:
+     - POSTGRES_USER=postgres
+     - POSTGRES_PASSWORD=Incorrect
+     - APP_DB_USER=jira
+     - APP_DB_PASS=jira
+     - APP_DB_NAME=jira
+
+  # pgadmin:
+  #   container_name: pgadmin
+  #   image: dpage/pgadmin4
+  #   volumes:
+  #    - pgadmin-volume:/var/lib/pgadmin
+  #   ports:
+  #    - "5050:5050"
+  #   depends_on:
+  #    - postgres
+  #   environment:
+  #    - SERVER_PROXY_NAME=pgadmin.internal
+  #    - SERVER_PROXY_PORT=80
+  #    - PGADMIN_LISTEN_PORT=5050
+  #    - SERVER_SCHEME=http
+  #    - PGADMIN_DEFAULT_EMAIL=pgadmin@pgadmin.internal
+  #    - PGADMIN_DEFAULT_PASSWORD=Incorrect
+
+  # nodered:
+  #   container_name: nodered
+  #   volumes:
+  #    - nodered-volume:/data
+  #   image: nodered/node-red:latest-minimal
+  #   ports:
+  #    - "1880:1880"
+
+  nginx:
+    container_name: nginx
+    image: nginx:latest
+    volumes:
+     - ./nginx/nginx.conf:/etc/nginx/nginx.conf
+    depends_on:
+     - jira-node1
+     - jira-node2
+    #  - pgadmin
+    ports:
+     - "80:80"
+    networks:
+      default:
+        aliases:
+         - jira.internal
+        #  - pgadmin.internal
+        #  - nodered.internal
+
+volumes:
+    # nodered-volume:
+    jira-node1-volume:
+    jira-node2-volume:
+    # pgadmin-volume:
+    postgres-volume:
