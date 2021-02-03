@@ -19,7 +19,7 @@ services:
      - JVM_MINIMUM_MEMORY=384m
      - JVM_MAXIMUM_MEMORY=786m
      - JVM_RESERVED_CODE_CACHE_SIZE=256m
-     - SET_PERMISSIONS=false
+     - SET_PERMISSIONS=true
      - CLUSTERED=true
      - JIRA_NODE_ID=jira-node1
      - JIRA_SHARED_HOME=/var/atlassian/application-data/jira/shared
@@ -49,7 +49,7 @@ services:
      - JVM_MINIMUM_MEMORY=384m
      - JVM_MAXIMUM_MEMORY=786m
      - JVM_RESERVED_CODE_CACHE_SIZE=256m
-     - SET_PERMISSIONS=false
+     - SET_PERMISSIONS=true
      - CLUSTERED=true
      - JIRA_NODE_ID=jira-node2
      - JIRA_SHARED_HOME=/var/atlassian/application-data/jira/shared
