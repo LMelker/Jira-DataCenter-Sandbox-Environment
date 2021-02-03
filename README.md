@@ -9,3 +9,15 @@ mkdir jira
 chown -R 2001:2001 jira/
 ````
 
+## Log
+
+    ___ Listeners ______________________________
+    ___ Services _______________________________
+    ___ Trusted Applications ___________________
+    ___ Java Class Paths _______________________
+    ___ System-level feature flags ______________
+    ___ Plugin System Started _________________
+    ___ Modifications ___________________________
+    ___ Starting the JIRA Plugin System _________________
+    ___ Plugin System Started _________________
+
