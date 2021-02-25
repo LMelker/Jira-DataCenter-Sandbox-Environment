@@ -1,9 +1,15 @@
 # Jira-DataCenter-Sandbox-Environment
 Play with Jira in a Dataceter setup
 
-## Setup the hosts file
-127.0.0.1 jira.internal
-127.0.0.1 nodered.internal
+## Pre-conf
+### Setup the hosts file
+You need to add this hosts in your "hosts"-file:
+
+```bash
+# Docker Jira Sandbox
+127.0.0.1  jira.internal
+127.0.0.1  nodered.internal
+```
 
 ## To reset the installation:
 ````bash
