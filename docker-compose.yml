@@ -3,7 +3,7 @@ version: '3'
 services:
   jira-node1:
     container_name: jira-node1
-    image: atlassian/jira-software:8.13.3-ubuntu
+    image: ${DOCKER_IMAGE}
     volumes:
      - ./jira:/var/atlassian/application-data/jira/shared
      - jira-node1-volume:/var/atlassian/application-data/jira
@@ -16,24 +16,23 @@ services:
      - ATL_PROXY_NAME=jira.internal
      - ATL_PROXY_PORT=80
      - ATL_TOMCAT_SCHEME=http
-     - JVM_MINIMUM_MEMORY=384m
-     - JVM_MAXIMUM_MEMORY=786m
-#     - JVM_MAXIMUM_MEMORY=1024m
+     - JVM_MINIMUM_MEMORY=${JVM_MINIMUM_MEMORY}
+     - JVM_MAXIMUM_MEMORY=${JVM_MAXIMUM_MEMORY}
      - JVM_RESERVED_CODE_CACHE_SIZE=256m
      - SET_PERMISSIONS=true
      - CLUSTERED=true
      - JIRA_NODE_ID=jira-node1
      - JIRA_SHARED_HOME=/var/atlassian/application-data/jira/shared
-     - ATL_JDBC_URL=jdbc:postgresql://postgres:5432/jira
-     - ATL_JDBC_USER=jira
-     - ATL_JDBC_PASSWORD=jira
+     - ATL_JDBC_URL=jdbc:postgresql://postgres:5432/${APP_DB_NAME}
+     - ATL_JDBC_USER=${APP_DB_USER}
+     - ATL_JDBC_PASSWORD=${APP_DB_PASS}
      - ATL_DB_DRIVER=org.postgresql.Driver
      - ATL_DB_TYPE=postgres72
      - ATL_DB_SCHEMA_NAME=public
 
   jira-node2:
     container_name: jira-node2
-    image: atlassian/jira-software:8.13.3-ubuntu
+    image: ${DOCKER_IMAGE}
     volumes:
      - ./jira:/var/atlassian/application-data/jira/shared
      - jira-node2-volume:/var/atlassian/application-data/jira
@@ -46,24 +45,23 @@ services:
      - ATL_PROXY_NAME=jira.internal
      - ATL_PROXY_PORT=80
      - ATL_TOMCAT_SCHEME=http
-     - JVM_MINIMUM_MEMORY=384m
-     - JVM_MAXIMUM_MEMORY=786m
-#     - JVM_MAXIMUM_MEMORY=1024m
+     - JVM_MINIMUM_MEMORY=${JVM_MINIMUM_MEMORY}
+     - JVM_MAXIMUM_MEMORY=${JVM_MAXIMUM_MEMORY}
      - JVM_RESERVED_CODE_CACHE_SIZE=256m
      - SET_PERMISSIONS=true
      - CLUSTERED=true
      - JIRA_NODE_ID=jira-node2
      - JIRA_SHARED_HOME=/var/atlassian/application-data/jira/shared
-     - ATL_JDBC_URL=jdbc:postgresql://postgres:5432/jira
-     - ATL_JDBC_USER=jira
-     - ATL_JDBC_PASSWORD=jira
+     - ATL_JDBC_URL=jdbc:postgresql://postgres:5432/${APP_DB_NAME}
+     - ATL_JDBC_USER=${APP_DB_USER}
+     - ATL_JDBC_PASSWORD=${APP_DB_PASS}
      - ATL_DB_DRIVER=org.postgresql.Driver
      - ATL_DB_TYPE=postgres72
      - ATL_DB_SCHEMA_NAME=public
 
   jira-node3:
     container_name: jira-node3
-    image: atlassian/jira-software:8.13.3-ubuntu
+    image: ${DOCKER_IMAGE}
     volumes:
      - ./jira:/var/atlassian/application-data/jira/shared
      - jira-node3-volume:/var/atlassian/application-data/jira
@@ -76,17 +74,16 @@ services:
      - ATL_PROXY_NAME=jira.internal
      - ATL_PROXY_PORT=80
      - ATL_TOMCAT_SCHEME=http
-     - JVM_MINIMUM_MEMORY=384m
-     - JVM_MAXIMUM_MEMORY=786m
-#     - JVM_MAXIMUM_MEMORY=1024m
+     - JVM_MINIMUM_MEMORY=${JVM_MINIMUM_MEMORY}
+     - JVM_MAXIMUM_MEMORY=${JVM_MAXIMUM_MEMORY}
      - JVM_RESERVED_CODE_CACHE_SIZE=256m
      - SET_PERMISSIONS=true
      - CLUSTERED=true
      - JIRA_NODE_ID=jira-node3
      - JIRA_SHARED_HOME=/var/atlassian/application-data/jira/shared
-     - ATL_JDBC_URL=jdbc:postgresql://postgres:5432/jira
-     - ATL_JDBC_USER=jira
-     - ATL_JDBC_PASSWORD=jira
+     - ATL_JDBC_URL=jdbc:postgresql://postgres:5432/${APP_DB_NAME}
+     - ATL_JDBC_USER=${APP_DB_USER}
+     - ATL_JDBC_PASSWORD=${APP_DB_PASS}
      - ATL_DB_DRIVER=org.postgresql.Driver
      - ATL_DB_TYPE=postgres72
      - ATL_DB_SCHEMA_NAME=public
@@ -104,11 +101,11 @@ services:
      - ./pgdata:/var/lib/postgresql/data
      - ./pgdb:/docker-entrypoint-initdb.d/
     environment:
-     - POSTGRES_USER=postgres
-     - POSTGRES_PASSWORD=Incorrect
-     - APP_DB_USER=jira
-     - APP_DB_PASS=jira
-     - APP_DB_NAME=jira
+     - POSTGRES_USER=${POSTGRES_USER}
+     - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+     - APP_DB_USER=${APP_DB_USER}
+     - APP_DB_PASS=${APP_DB_PASS}
+     - APP_DB_NAME=${APP_DB_NAME}
 
   nodered:
     container_name: nodered
