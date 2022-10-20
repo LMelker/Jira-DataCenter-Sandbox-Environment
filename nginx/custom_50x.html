@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html>
+  <title>Error!</title>
+  <meta http-equiv="refresh" content="20">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+<body>
+
+<div class="w3-display-container w3-animate-opacity">
+  <img src="https://picsum.photos/1024/600.jpg?grayscale&random=1" alt="Boat" style="width:100%;min-height:200px;">
+  <div class="w3-display-middle w3-text-black w3-card-4 w3-white w3-margin w3-padding">
+  <h2>Technical difficulties!!</h2>
+  <H4 id="info"></h4>
+  <p>Hang tight. We will retry in 20 seconds!</p>
+  </div>
+</div>
+</body>
+ <script>
+  console.log(window);
+  document.getElementById('info').innerHTML = "The host: <a href='" + window.origin + "'>" + window.location.hostname + "</a> is down... " ;
+
+ </script>
+</html>

@@ -1,0 +1,194 @@
+[
+    {
+        "id": "66bd4ec54fdde7ef",
+        "type": "tab",
+        "label": "Flow 1",
+        "disabled": false,
+        "info": ""
+    },
+    {
+        "id": "01ea7806df046666",
+        "type": "junction",
+        "z": "66bd4ec54fdde7ef",
+        "x": 520,
+        "y": 360,
+        "wires": [
+            [
+                "19cdf4424aa15ca6",
+                "41032b5a97b6eea0",
+                "edb5e7029a4b6b8d"
+            ]
+        ]
+    },
+    {
+        "id": "2110d91e3ad09470",
+        "type": "junction",
+        "z": "66bd4ec54fdde7ef",
+        "x": 860,
+        "y": 360,
+        "wires": [
+            [
+                "ebe16ccdb6072ee1"
+            ]
+        ]
+    },
+    {
+        "id": "5e35e6872039226f",
+        "type": "comment",
+        "z": "66bd4ec54fdde7ef",
+        "name": "WARNING: please check you have started this container with a volume that is mounted to /data\\n otherwise any flow changes are lost when you redeploy or upgrade the container\\n (e.g. upgrade to a more recent node-red docker image).\\n  If you are using named volumes you can ignore this warning.\\n Double click or see info side panel to learn how to start Node-RED in Docker to save your work",
+        "info": "\nTo start docker with a bind mount volume (-v option), for example:\n\n```\ndocker run -it -p 1880:1880 -v /home/user/node_red_data:/data --name mynodered nodered/node-red\n```\n\nwhere `/home/user/node_red_data` is a directory on your host machine where you want to store your flows.\n\nIf you do not do this then you can experiment and redploy flows, but if you restart or upgrade the container the flows will be disconnected and lost. \n\nThey will still exist in a hidden data volume, which can be recovered using standard docker techniques, but that is much more complex than just starting with a named volume as described above.",
+        "x": 350,
+        "y": 80,
+        "wires": []
+    },
+    {
+        "id": "53746640e86c99d4",
+        "type": "inject",
+        "z": "66bd4ec54fdde7ef",
+        "name": "",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "10",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "",
+        "payloadType": "date",
+        "x": 370,
+        "y": 360,
+        "wires": [
+            [
+                "01ea7806df046666"
+            ]
+        ]
+    },
+    {
+        "id": "19cdf4424aa15ca6",
+        "type": "http request",
+        "z": "66bd4ec54fdde7ef",
+        "name": "jira-node1 status",
+        "method": "GET",
+        "ret": "obj",
+        "paytoqs": "ignore",
+        "url": "http://jira-node1:8080/status",
+        "tls": "",
+        "persist": false,
+        "proxy": "",
+        "insecureHTTPParser": false,
+        "authType": "",
+        "senderr": false,
+        "headers": [],
+        "x": 670,
+        "y": 300,
+        "wires": [
+            [
+                "2110d91e3ad09470"
+            ]
+        ]
+    },
+    {
+        "id": "41032b5a97b6eea0",
+        "type": "http request",
+        "z": "66bd4ec54fdde7ef",
+        "name": "jira-node2 status",
+        "method": "GET",
+        "ret": "obj",
+        "paytoqs": "ignore",
+        "url": "http://jira-node2:8080/status",
+        "tls": "",
+        "persist": false,
+        "proxy": "",
+        "insecureHTTPParser": false,
+        "authType": "",
+        "senderr": false,
+        "headers": [],
+        "x": 670,
+        "y": 360,
+        "wires": [
+            [
+                "2110d91e3ad09470"
+            ]
+        ]
+    },
+    {
+        "id": "edb5e7029a4b6b8d",
+        "type": "http request",
+        "z": "66bd4ec54fdde7ef",
+        "name": "jira-node3 status",
+        "method": "GET",
+        "ret": "obj",
+        "paytoqs": "ignore",
+        "url": "http://jira-node3:8080/status",
+        "tls": "",
+        "persist": false,
+        "proxy": "",
+        "insecureHTTPParser": false,
+        "authType": "",
+        "senderr": false,
+        "headers": [],
+        "x": 670,
+        "y": 420,
+        "wires": [
+            [
+                "2110d91e3ad09470"
+            ]
+        ]
+    },
+    {
+        "id": "c7eaaba2b542e598",
+        "type": "catch",
+        "z": "66bd4ec54fdde7ef",
+        "name": "",
+        "scope": null,
+        "uncaught": false,
+        "x": 420,
+        "y": 560,
+        "wires": [
+            [
+                "c9cd02fc2703aca2"
+            ]
+        ]
+    },
+    {
+        "id": "ebe16ccdb6072ee1",
+        "type": "debug",
+        "z": "66bd4ec54fdde7ef",
+        "name": "Status?",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "targetType": "full",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 960,
+        "y": 360,
+        "wires": []
+    },
+    {
+        "id": "c9cd02fc2703aca2",
+        "type": "debug",
+        "z": "66bd4ec54fdde7ef",
+        "name": "debug 1",
+        "active": false,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "false",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 740,
+        "y": 560,
+        "wires": []
+    }
+]
