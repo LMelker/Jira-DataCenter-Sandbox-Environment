@@ -2,7 +2,6 @@ version: '3'
 
 services:
   jira-node1:
-    container_name: jira-node1
     image: ${DOCKER_IMAGE}
     volumes:
      - ./jira/shared:/var/atlassian/application-data/jira/shared
@@ -12,10 +11,9 @@ services:
     depends_on:
      - postgres
     environment:
-#     - ATL_AUTOLOGIN_COOKIE_AGE=3600
-     - ATL_PROXY_NAME=jira.internal
-     - ATL_PROXY_PORT=80
-     - ATL_TOMCAT_SCHEME=http
+     - ATL_PROXY_NAME=${ATL_PROXY_NAME}
+     - ATL_PROXY_PORT=${ATL_PROXY_PORT}
+     - ATL_TOMCAT_SCHEME=${ATL_TOMCAT_SCHEME}
      - JVM_MINIMUM_MEMORY=${JVM_MINIMUM_MEMORY}
      - JVM_MAXIMUM_MEMORY=${JVM_MAXIMUM_MEMORY}
      - JVM_SUPPORT_RECOMMENDED_ARGS=${JVM_SUPPORT_RECOMMENDED_ARGS}
@@ -32,7 +30,6 @@ services:
      - ATL_DB_SCHEMA_NAME=public
 
   jira-node2:
-    container_name: jira-node2
     image: ${DOCKER_IMAGE}
     volumes:
      - ./jira/shared:/var/atlassian/application-data/jira/shared
@@ -42,10 +39,9 @@ services:
     depends_on:
      - postgres
     environment:
- #    - ATL_AUTOLOGIN_COOKIE_AGE=3600
-     - ATL_PROXY_NAME=jira.internal
-     - ATL_PROXY_PORT=80
-     - ATL_TOMCAT_SCHEME=http
+     - ATL_PROXY_NAME=${ATL_PROXY_NAME}
+     - ATL_PROXY_PORT=${ATL_PROXY_PORT}
+     - ATL_TOMCAT_SCHEME=${ATL_TOMCAT_SCHEME}
      - JVM_MINIMUM_MEMORY=${JVM_MINIMUM_MEMORY}
      - JVM_MAXIMUM_MEMORY=${JVM_MAXIMUM_MEMORY}
      - JVM_SUPPORT_RECOMMENDED_ARGS=${JVM_SUPPORT_RECOMMENDED_ARGS}
@@ -62,7 +58,6 @@ services:
      - ATL_DB_SCHEMA_NAME=public
 
   jira-node3:
-    container_name: jira-node3
     image: ${DOCKER_IMAGE}
     volumes:
      - ./jira/shared:/var/atlassian/application-data/jira/shared
@@ -72,10 +67,9 @@ services:
     depends_on:
      - postgres
     environment:
-#     - ATL_AUTOLOGIN_COOKIE_AGE=3600
-     - ATL_PROXY_NAME=jira.internal
-     - ATL_PROXY_PORT=80
-     - ATL_TOMCAT_SCHEME=http
+     - ATL_PROXY_NAME=${ATL_PROXY_NAME}
+     - ATL_PROXY_PORT=${ATL_PROXY_PORT}
+     - ATL_TOMCAT_SCHEME=${ATL_TOMCAT_SCHEME}
      - JVM_MINIMUM_MEMORY=${JVM_MINIMUM_MEMORY}
      - JVM_MAXIMUM_MEMORY=${JVM_MAXIMUM_MEMORY}
      - JVM_SUPPORT_RECOMMENDED_ARGS=${JVM_SUPPORT_RECOMMENDED_ARGS}
@@ -90,9 +84,8 @@ services:
      - ATL_DB_DRIVER=org.postgresql.Driver
      - ATL_DB_TYPE=postgres72
      - ATL_DB_SCHEMA_NAME=public
-     
+
   postgres:
-    container_name: postgres
     image: postgres:10
     healthcheck:
       test: [ "CMD", "pg_isready", "-q", "-d", "postgres", "-U", "postgres" ]
@@ -111,7 +104,6 @@ services:
      - APP_DB_NAME=${APP_DB_NAME}
 
   nodered:
-    container_name: nodered
     volumes:
      - nodered-volume:/data
     image: nodered/node-red:latest-minimal
@@ -119,7 +111,6 @@ services:
 #     - "1880:1880"
 
   grafana:
-    container_name: grafana
     image: grafana/grafana
     volumes:
       - grafana1data-volume:/var/lib/grafana
@@ -128,7 +119,6 @@ services:
  #     - "3000:3000"
 
   prometheus:
-    container_name: prometheus
     image: bitnami/prometheus:latest
     volumes:
       - ./prometheus/prometheus.yml:/etc/prometheus/prometheus.yml
@@ -140,38 +130,12 @@ services:
 #  ports:
 #   - "9090:9090"
 
-  # nginx:
-  #   container_name: nginx
-  #   image: nginx:latest
-  #   volumes:
-  #    - ./nginx/nginx.conf:/etc/nginx/nginx.conf
-  #    - ./nginx/custom_50x.html:/usr/share/nginx/html/custom_50x.html
-  #    - ./nginx/:/etc/nginx/
-  #   depends_on:
-  #    - jira-node1
-  #    - jira-node2
-  #    - jira-node3
-  #    - prometheus
-  #    - grafana
-  #    - nodered
-  #   ports:
-  #    - "80:80"
-  #   networks:
-  #     default:
-  #       aliases:
-  #        - jira.internal
-  #        - prometheus.internal
-  #        - grafana.internal
-  #        - nodered.internal
-
-# docker run -d --name my-running-haproxy -v /path/to/etc/haproxy:/usr/local/etc/haproxy:ro --sysctl net.ipv4.ip_unprivileged_port_start=0 haproxy:2.3
-
   haproxy:
-    container_name: haproxy
     image: haproxy:latest
     volumes:
     - ./haproxy:/usr/local/etc/haproxy:ro
     - ./haproxy/503.http:/etc/haproxy/errors/503.http
+    - ./haproxy/haproxy.pem:/etc/haproxy/certs/haproxy.pem
     depends_on:
     - jira-node1
     - jira-node2
@@ -181,6 +145,7 @@ services:
     - nodered
     ports:
     - "80:80"
+    - "443:443"
     networks:
       default:
         aliases:
@@ -188,8 +153,6 @@ services:
           - prometheus.internal
           - grafana.internal
           - nodered.internal
-
-
 
 volumes:
     nodered-volume:
