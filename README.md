@@ -47,16 +47,16 @@ $ sudo ./firstrun.sh
 And follow the info in this script...
 
 When you are up on all nodes, you will be able to access jira like this:
-http://jira.internal
-http://jira.internal/?node=jira-node3
-http://jira2.internal
+* http://jira.internal
+* http://jira.internal/?node=jira-node3
+* http://jira2.internal
 
 HAProxy supports Session Cookie, so set then checkmark: "Remeber my login"
 
 ## Grafana and Prometheus
 This page can give you a nice start for setting this up:
-https://confluence.atlassian.com/adminjiraserver/monitor-jira-with-prometheus-and-grafana-1155466715.html
-https://github.com/atlassian-labs/DC-App-monitoring-EAP-dashboards
+* https://confluence.atlassian.com/adminjiraserver/monitor-jira-with-prometheus-and-grafana-1155466715.html
+* https://github.com/atlassian-labs/DC-App-monitoring-EAP-dashboards
 
 ## Nodered Flow
 Import this file as a flow:
