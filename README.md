@@ -51,7 +51,7 @@ When you are up on all nodes, you will be able to access jira like this:
 * http://jira.internal/?node=jira-node3
 * http://jira2.internal
 
-HAProxy supports Session Cookie, so set then checkmark: "Remeber my login"
+HAProxy supports Session Cookie, so set then checkmark: "Remember my login"
 
 ## Grafana and Prometheus
 This page can give you a nice start for setting this up:
