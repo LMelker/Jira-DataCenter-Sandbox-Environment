@@ -59,7 +59,10 @@ https://confluence.atlassian.com/adminjiraserver/monitor-jira-with-prometheus-an
 https://github.com/atlassian-labs/DC-App-monitoring-EAP-dashboards
 
 ## Nodered Flow
-Import this file as a flow: nodered-flow-check-status-on-nodes.json
+Import this file as a flow:
+````
+nodered-flow-check-status-on-nodes.json
+````
 And you are able to check the status on each node.
 
 
