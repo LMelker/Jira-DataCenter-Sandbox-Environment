@@ -4,7 +4,7 @@ services:
   jira-node1:
     image: ${DOCKER_IMAGE}
     volumes:
-     - ./jira/shared:/var/atlassian/application-data/jira/shared
+     - /home/lars/Develop/Docker/Jira-DataCenter-Sandbox-Environment/jira/shared:/var/atlassian/application-data/jira/shared
      - jira-node1-volume:/var/atlassian/application-data/jira
 #    ports:
 #     - "8081:8080"
@@ -32,7 +32,7 @@ services:
   jira-node2:
     image: ${DOCKER_IMAGE}
     volumes:
-     - ./jira/shared:/var/atlassian/application-data/jira/shared
+     - /home/lars/Develop/Docker/Jira-DataCenter-Sandbox-Environment/jira/shared:/var/atlassian/application-data/jira/shared
      - jira-node2-volume:/var/atlassian/application-data/jira
  #   ports:
  #    - "8082:8080"
@@ -60,7 +60,7 @@ services:
   jira-node3:
     image: ${DOCKER_IMAGE}
     volumes:
-     - ./jira/shared:/var/atlassian/application-data/jira/shared
+     - /home/lars/Develop/Docker/Jira-DataCenter-Sandbox-Environment/jira/shared:/var/atlassian/application-data/jira/shared
      - jira-node3-volume:/var/atlassian/application-data/jira
 #    ports:
 #     - "8083:8080"
@@ -86,7 +86,7 @@ services:
      - ATL_DB_SCHEMA_NAME=public
 
   postgres:
-    image: postgres:10
+    image: postgres:15
     healthcheck:
       test: [ "CMD", "pg_isready", "-q", "-d", "postgres", "-U", "postgres" ]
       timeout: 45s
@@ -94,14 +94,30 @@ services:
       retries: 10
     restart: always
     volumes:
-     - ./pgdata:/var/lib/postgresql/data
-     - ./pgdb:/docker-entrypoint-initdb.d/
+     - /home/lars/Develop/Docker/Jira-DataCenter-Sandbox-Environment/pgdata:/var/lib/postgresql/data
+     - /home/lars/Develop/Docker/Jira-DataCenter-Sandbox-Environment/pgdb:/docker-entrypoint-initdb.d/
     environment:
      - POSTGRES_USER=${POSTGRES_USER}
      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
      - APP_DB_USER=${APP_DB_USER}
      - APP_DB_PASS=${APP_DB_PASS}
      - APP_DB_NAME=${APP_DB_NAME}
+
+  pgadmin:
+    image: dpage/pgadmin4:latest
+    volumes:
+     - pgadmin1-volume:/var/lib/pgadmin
+    ports:
+     - "5050:5050"
+    depends_on:
+     - postgres
+    environment:
+     - SERVER_PROXY_NAME=pgadmin.internal
+     - SERVER_PROXY_PORT=80
+     - PGADMIN_LISTEN_PORT=5050
+     - SERVER_SCHEME=http
+     - PGADMIN_DEFAULT_EMAIL=pgadmin@pgadmin.internal
+     - PGADMIN_DEFAULT_PASSWORD=Incorrect
 
   nodered:
     volumes:
@@ -115,13 +131,14 @@ services:
     volumes:
       - grafana1data-volume:/var/lib/grafana
       - grafana1conf-volume:/etc/grafana
+      - /home/lars/Develop/Docker/Jira-DataCenter-Sandbox-Environment/grafana/grafana.ini:/etc/grafana/grafana.ini
  #   ports:
  #     - "3000:3000"
 
   prometheus:
     image: bitnami/prometheus:latest
     volumes:
-      - ./prometheus/prometheus.yml:/etc/prometheus/prometheus.yml
+      - /home/lars/Develop/Docker/Jira-DataCenter-Sandbox-Environment/prometheus/prometheus.yml:/etc/prometheus/prometheus.yml
       - prometheus1-volume:/prometheus
     command:
     - '--config.file=/etc/prometheus/prometheus.yml'
@@ -133,9 +150,9 @@ services:
   haproxy:
     image: haproxy:latest
     volumes:
-    - ./haproxy:/usr/local/etc/haproxy:ro
-    - ./haproxy/503.http:/etc/haproxy/errors/503.http
-    - ./haproxy/haproxy.pem:/etc/haproxy/certs/haproxy.pem
+    - /home/lars/Develop/Docker/Jira-DataCenter-Sandbox-Environment/haproxy:/usr/local/etc/haproxy:ro
+    - /home/lars/Develop/Docker/Jira-DataCenter-Sandbox-Environment/haproxy/503.http:/etc/haproxy/errors/503.http
+    - /home/lars/Develop/Docker/Jira-DataCenter-Sandbox-Environment/haproxy/haproxy.pem:/etc/haproxy/certs/haproxy.pem
     depends_on:
     - jira-node1
     - jira-node2
@@ -154,6 +171,18 @@ services:
           - grafana.internal
           - nodered.internal
 
+  deepstack:
+    image: deepquestai/deepstack
+    volumes:
+    - deepstackstorage:/datastore 
+    ports:
+    - "5000:5000"
+    environment: 
+    - VISION-SCENE=True
+    - VISION-FACE=True
+    - VISION-DETECTION=True
+    - THREADCOUNT=100
+
 volumes:
     nodered-volume:
     jira-node1-volume:
@@ -162,3 +191,5 @@ volumes:
     grafana1data-volume:
     grafana1conf-volume:
     prometheus1-volume:
+    pgadmin1-volume:
+    deepstackstorage:

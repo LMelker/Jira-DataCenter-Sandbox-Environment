@@ -9,3 +9,11 @@ docker volume rm jira-datacenter-sandbox-environment_jira-node1-volume
 docker volume rm jira-datacenter-sandbox-environment_jira-node2-volume
 docker volume rm jira-datacenter-sandbox-environment_jira-node3-volume
 
+docker volume rm jira-datacenter-sandbox-environment_nodered-volume
+
+docker volume rm jira-datacenter-sandbox-environment_grafana1data-volume
+docker volume rm jira-datacenter-sandbox-environment_grafana1conf-volume
+
+docker volume rm jira-datacenter-sandbox-environment_prometheus1-volume
+docker volume rm jira-datacenter-sandbox-environment_pgadmin1-volume
+docker volume rm jira-datacenter-sandbox-environment_deepstackstorage

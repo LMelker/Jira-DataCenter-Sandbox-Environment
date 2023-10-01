@@ -28,6 +28,7 @@ $ sudoedit /etc/hosts
 ```
 
 ## To reset the installation:
+You need to set right owner on the folder of jira before the first run. 
 ````bash
 $ rm -Rf ./pgdata
 $ rm -Rf ./jira
@@ -51,7 +52,9 @@ When you are up on all nodes, you will be able to access jira like this:
 * http://jira.internal/?node=jira-node3
 * http://jira2.internal
 
-HAProxy supports Session Cookie, so set then checkmark: "Remember my login"
+This funktion to shift node is not 100% whith Jira, I'll say, it's do not working at all yet! I need to look in to it and if there any function to tell HAProxy to stick to the next node. 
+
+HAProxy supports Session Cookie, so set then checkmark: "Remember my login" when you are loging in to Jira.
 
 ## Grafana and Prometheus
 This page can give you a nice start for setting this up:

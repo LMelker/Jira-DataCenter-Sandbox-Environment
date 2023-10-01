@@ -2,7 +2,7 @@
 x=1
 while [ $x -gt 0 ]
   do
-    echo "Checking http://jira.internal/status ..."
+    echo "Checking http://$2.internal/status ..."
     curl http://$2.internal/status 2>/dev/null | grep "$1"
     x=$?
     echo "Waiting node for status:" $1
