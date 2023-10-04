@@ -75,7 +75,7 @@ When you are up on all nodes, you will be able to access jira like this:
 * http://jira2.internal
 
 > [!WARNING]
-> This funktion to shift node is not 100% whith Jira, I'll say, it's do not working at all yet! I need to look in to it and if there any function to tell HAProxy to stick to the next node. 
+> This funktion to shift node is not 100% whit Jira, I'll say, it's do not working at all yet! I need to look in to it and if there any function to tell HAProxy to stick to the next node. 
 
 HAProxy supports Session Cookie, so set then checkmark: "Remember my login" when you are loging in to Jira.
 
