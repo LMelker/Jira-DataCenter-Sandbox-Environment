@@ -26,6 +26,28 @@ $ sudoedit /etc/hosts
 127.0.80.1  crowd.internal
 127.0.90.1  pgadmin.internal
 ```
+### You need also verify the .env file:
+````bash
+# Location there you have clone this repo to, like:
+PWD=/home/lars/Develop/Docker/Jira-DataCenter-Sandbox-Environment
+
+# Jira ENV
+DOCKER_IMAGE=atlassian/jira-core:9.11.1
+ATL_PROXY_NAME=jira.internal
+ATL_TOMCAT_SCHEME=https
+ATL_PROXY_PORT=443
+JVM_MINIMUM_MEMORY=2G
+JVM_MAXIMUM_MEMORY=4G
+JVM_SUPPORT_RECOMMENDED_ARGS=-Datlassian.plugins.enable.wait=600
+
+# Postgres Database
+POSTGRES_USER=postgres
+POSTGRES_PASSWORD=Incorrect
+APP_DB_USER=jiradbuser
+APP_DB_PASS=jirapass
+APP_DB_NAME=jiradb
+
+````
 
 ## To reset the installation:
 You need to set right owner on the folder of jira before the first run. 
@@ -52,7 +74,8 @@ When you are up on all nodes, you will be able to access jira like this:
 * http://jira.internal/?node=jira-node3
 * http://jira2.internal
 
-This funktion to shift node is not 100% whith Jira, I'll say, it's do not working at all yet! I need to look in to it and if there any function to tell HAProxy to stick to the next node. 
+> [!WARNING]
+> This funktion to shift node is not 100% whith Jira, I'll say, it's do not working at all yet! I need to look in to it and if there any function to tell HAProxy to stick to the next node. 
 
 HAProxy supports Session Cookie, so set then checkmark: "Remember my login" when you are loging in to Jira.
 
